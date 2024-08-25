@@ -10,8 +10,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 
 @Entity
 public class Invoice {
@@ -22,17 +20,50 @@ public class Invoice {
     private String place;
     @Column(name = "total_price", nullable = false)
     private Integer totalPrice;
-    @Column(name = "payment_method_id", nullable = false)
-    private Long paymentMethodId;
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
     @Enumerated(EnumType.ORDINAL)
+    @Column(name = "payment_method_id", nullable = false)
     private PaymentMethod paymentMethod;
 
-    @PrePersist
-    @PreUpdate
-    public void updatePaymentMethodId() {
-        paymentMethodId = paymentMethod.ordinal() + 1L;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
+    }
+
+    public Integer getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Integer totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 }

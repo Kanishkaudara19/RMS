@@ -6,8 +6,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
 
@@ -24,16 +22,9 @@ public class User {
     private String username;
     @Column(nullable = false)
     private String password;
-    @Column(name = "user_type_id", nullable = false)
-    private Long userTypeId;
     @Enumerated(EnumType.ORDINAL)
+    @Column(name = "user_type_id", nullable = false)
     private UserType userType;
-
-    @PrePersist
-    @PreUpdate
-    public void updateUserTypeId() {
-        userTypeId = userType.ordinal() + 1L;
-    }
 
     public Long getId() {
         return id;
@@ -73,14 +64,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Long getUserTypeId() {
-        return userTypeId;
-    }
-
-    public void setUserTypeId(Long userTypeId) {
-        this.userTypeId = userTypeId;
     }
 
     public UserType getUserType() {

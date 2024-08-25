@@ -4,18 +4,18 @@ import java.time.LocalDateTime;
 
 import com.kanishka.rms.model.OrderType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
 
 @Entity
+@Table(name = "`order`")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,16 +30,9 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "customer_user_id", nullable = false)
     private User customer;
-    @Column(name = "order_type_id", nullable = false)
-    private Long orderTypeId;
     @Enumerated(EnumType.ORDINAL)
+    @Column(name = "order_type_id", nullable = false)
     private OrderType orderType;
-
-    @PrePersist
-    @PreUpdate
-    public void updateOrderTypeId() {
-        orderTypeId = orderType.ordinal() + 1L;
-    }
 
     public Long getId() {
         return id;
@@ -79,14 +72,6 @@ public class Order {
 
     public void setCustomer(User customer) {
         this.customer = customer;
-    }
-
-    public Long getOrderTypeId() {
-        return orderTypeId;
-    }
-
-    public void setOrderTypeId(Long orderTypeId) {
-        this.orderTypeId = orderTypeId;
     }
 
     public OrderType getOrderType() {
