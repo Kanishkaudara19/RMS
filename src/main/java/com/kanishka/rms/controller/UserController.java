@@ -5,8 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.kanishka.rms.dto.UserDTO;
+import com.kanishka.rms.entity.User;
+import com.kanishka.rms.exception.UserNotFoundException;
 import com.kanishka.rms.model.UserType;
 import com.kanishka.rms.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/user")
@@ -20,8 +23,21 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestParam("username") String username,
-                                        @RequestParam("password") String password) {
-        return ResponseEntity.badRequest().build();
+                                        @RequestParam("password") String password,
+                                        HttpServletRequest request) {
+        ResponseEntity<String> response;
+
+        try {
+            User user = userService.login(username, password);
+
+            request.getSession().setAttribute("user", user);
+
+            response = ResponseEntity.ok().build();
+        } catch (UserNotFoundException ex) {
+            response = ResponseEntity.badRequest().body(ex.getMessage());
+        }
+
+        return response;
     }
 
     @PostMapping("/register")

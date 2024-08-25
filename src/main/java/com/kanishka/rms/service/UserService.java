@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.kanishka.rms.dto.UserDTO;
 import com.kanishka.rms.entity.User;
 import com.kanishka.rms.exception.UserAlreadyExistsException;
+import com.kanishka.rms.exception.UserNotFoundException;
 import com.kanishka.rms.model.UserType;
 import com.kanishka.rms.repo.UserRepository;
 
@@ -36,6 +37,16 @@ public class UserService {
 
         if(userRepository.save(user) == null) {
             throw new Exception("Something went wrong! Please try again later.");
+        }
+    }
+
+    public User login(String username, String password) throws UserNotFoundException {
+        Optional<User> optionalUser = userRepository.findByUsernameAndPassword(username, password);
+
+        if(optionalUser.isPresent()) {
+            return optionalUser.get();
+        } else {
+            throw new UserNotFoundException("Wrong username or password!");
         }
     }
 }
