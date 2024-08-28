@@ -58,4 +58,21 @@ public class UserController {
 
         return response;
     }
+
+    @PostMapping("/update/contact")
+    public ResponseEntity<String> updateContact(@RequestParam("mobile") String mobile,
+                                                @RequestParam("address") String address,
+                                                HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        ResponseEntity<String> response;
+
+        try {
+            userService.update(user, mobile, address);
+
+            response = ResponseEntity.ok("Contact details updated successfully!");
+        } catch (Exception ex) {
+            response = ResponseEntity.badRequest().body(ex.getMessage());
+        }
+        return response;
+    }
 }
