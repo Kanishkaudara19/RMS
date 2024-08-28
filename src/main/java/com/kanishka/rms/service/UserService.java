@@ -6,19 +6,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kanishka.rms.dto.UserDTO;
+import com.kanishka.rms.entity.Contact;
 import com.kanishka.rms.entity.User;
 import com.kanishka.rms.exception.UserAlreadyExistsException;
 import com.kanishka.rms.exception.UserNotFoundException;
 import com.kanishka.rms.model.UserType;
+import com.kanishka.rms.repo.ContactRepository;
 import com.kanishka.rms.repo.UserRepository;
 
 @Service
 public class UserService {
     @Autowired
     private final UserRepository userRepository;
+    @Autowired
+    private final ContactRepository contactRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, ContactRepository contactRepository) {
         this.userRepository = userRepository;
+        this.contactRepository = contactRepository;
     }
 
     public void register(UserDTO userDTO) throws Exception {
@@ -47,6 +52,23 @@ public class UserService {
             return optionalUser.get();
         } else {
             throw new UserNotFoundException("Wrong username or password!");
+        }
+    }
+
+    public void update(User user, String mobile, String address) throws Exception {
+        Optional<User> optionalUser = userRepository.findByUsername(user.getUsername());
+
+        if(optionalUser.isEmpty()) {
+            throw new UserNotFoundException("User not found");
+        }
+
+        Contact contact = new Contact();
+        contact.setCustomer(optionalUser.get());
+        contact.setMobile(mobile);
+        contact.setAddress(address);
+
+        if(contactRepository.save(contact) == null) {
+            throw new Exception("Something went wrong! Please try again later.");
         }
     }
 }
