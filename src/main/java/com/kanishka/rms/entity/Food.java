@@ -20,21 +20,6 @@ public class Food {
     @Column(name = "thumbnail_url", nullable = false)
     private String thumbnailUrl;
 
-    public Food(Long id, String name, Integer price, Integer available, String thumbnailUrl) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.available = available;
-        this.thumbnailUrl = thumbnailUrl;
-    }
-
-    public Food(String name, Integer price, Integer available, String thumbnailUrl) {
-        this.name = name;
-        this.price = price;
-        this.available = available;
-        this.thumbnailUrl = thumbnailUrl;
-    }
-
     public Long getId() {
         return id;
     }
