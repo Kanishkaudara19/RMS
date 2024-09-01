@@ -3,11 +3,13 @@ package com.kanishka.rms.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.kanishka.rms.dto.FoodDTO;
 import com.kanishka.rms.entity.Food;
 import com.kanishka.rms.repo.FoodRepository;
 
+@Service
 public class FoodService {
     @Autowired
     private final FoodRepository foodRepository;
