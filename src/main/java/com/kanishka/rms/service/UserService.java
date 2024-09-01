@@ -71,4 +71,14 @@ public class UserService {
             throw new Exception("Something went wrong! Please try again later.");
         }
     }
+
+    public User findById(Long id) throws UserNotFoundException {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if(optionalUser.isEmpty()) {
+            throw new UserNotFoundException("User not found.");
+        }
+
+        return optionalUser.get();
+    }
 }
