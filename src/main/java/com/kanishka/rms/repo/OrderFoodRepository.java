@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.kanishka.rms.entity.OrderFood;
 
-public interface OrdeFoodRepository extends JpaRepository<OrderFood, Long> {
+public interface OrderFoodRepository extends JpaRepository<OrderFood, Long> {
 }
