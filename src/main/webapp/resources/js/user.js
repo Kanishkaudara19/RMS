@@ -149,3 +149,83 @@ function createReviewList(reviewObjArray) {
 }
 
 // index.jsp
+
+// user_auth.jsp
+
+function login() {
+    var un = document.getElementById("login-username");
+    var pw = document.getElementById("login-password");
+
+    var encodedUrl = "username=" + encodeURIComponent(un.value) +
+        "&password=" + encodeURIComponent(pw.value);
+
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if(request.readyState === 4) {
+            if(request.status===RESPONSE_OK) {
+                window.location = "index.jsp";
+            } else {
+                alert(request.responseText);
+            }
+        }
+    };
+    request.open("POST", "/user/login", true);
+    request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    request.send(encodedUrl);
+}
+
+function validateUser(fn, ln, un, pw, cpw) {
+    if(fn==="" || ln==="" || un==="" || pw==="") {
+        alert("Please fill all the required fields.");
+    } else if(un.length<4 || un.length>20) {
+        alert("Username must be within 4-20 characters.");
+    } else if(pw.length<4 || pw.length>20) {
+        alert("Password must be within 4-20 characters.");
+    } else if(pw !== cpw) {
+        alert("Password does not match with confirm password.");
+    } else {
+        return true;
+    }
+    return false;
+}
+
+function register() {
+    var fn = document.getElementById("First-name");
+    var ln = document.getElementById("Last-name");
+    var un = document.getElementById("register-Username");
+    var pw = document.getElementById("register-password");
+    var cpw = document.getElementById("register-confirm-password");
+
+    if(!validateUser(fn.value, ln.value, un.value, pw.value, cpw.value)) {
+        return;
+    }
+
+    var jsonForm = JSON.stringify({
+        "fname": fn.value,
+        "lname": ln.value,
+        "username": un.value,
+        "password": pw.value,
+        "usertype": "CUSTOMER"
+    });
+
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if(request.readyState === 4) {
+            if(request.status===RESPONSE_OK) {
+                alert("User registered successfully!");
+                fn.value = "";
+                ln.value = "";
+                un.value = "";
+                pw.value = "";
+                cpw.value = "";
+            } else {
+                alert(request.responseText);
+            }
+        }
+    };
+    request.open("POST", "/user/register", true);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(jsonForm);
+}
+
+// user_auth.jsp
