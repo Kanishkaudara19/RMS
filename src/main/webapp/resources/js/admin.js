@@ -61,6 +61,7 @@ function register() {
         if(request.readyState === 4) {
             if(request.status===RESPONSE_OK) {
                 alert("User registered successfully!");
+                getUserList();
             } else {
                 alert(request.responseText);
             }
@@ -95,6 +96,7 @@ function updateUser() {
         if(request.readyState === 4) {
             if(request.status===RESPONSE_OK) {
                 alert("User updated successfully!");
+                getUserList();
             } else {
                 alert(request.responseText);
             }
@@ -194,6 +196,7 @@ function addFood() {
                 alert("Food is added successfully!");
                 food.value = "";
                 price.value = "";
+                getFoodList();
             } else {
                 alert(request.responseText);
             }
