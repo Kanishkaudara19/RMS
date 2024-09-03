@@ -64,8 +64,12 @@ public class FoodController {
     @GetMapping("/all")
     public ResponseEntity<List<FoodDTO>> getAllFoods(HttpServletRequest request) {
         List<FoodDTO> foodDTOList;
+        User user = (User) request.getSession().getAttribute("user");
+        UserType userType = UserType.CUSTOMER;
 
-        UserType userType = ((User) request.getSession().getAttribute("user")).getUserType();
+        if(user != null) {
+            userType = user.getUserType();
+        }
 
         if(userType == UserType.CUSTOMER) {
             foodDTOList = foodService.findAll(true);
