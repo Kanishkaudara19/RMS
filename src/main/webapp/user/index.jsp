@@ -1,3 +1,5 @@
+<%@ page import="com.kanishka.rms.entity.User" %>
+<%@ page import="com.kanishka.rms.model.UserType" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -48,7 +50,6 @@
         }
 
         .review-rating {
-            color: #f39c12;
             margin-bottom: 10px;
         }
 
@@ -98,7 +99,7 @@
     </style>
 </head>
 
-<body>
+<body onload="getFoodList(); getReviewList();">
     <!-- Navigation Bar -->
     <nav class="navbar navbar-default navbar-fixed-top navbar-transparent">
         <div class="container">
@@ -152,71 +153,7 @@
                 </div>
 
                 <div id="menu-wrapper" class="row">
-                    <div class="col-md-4 menu-item  breakfast menu-restaurant">
-                        <div class="card ">
-                            <img src="https://i0.wp.com/upload.wikimedia.org/wikipedia/commons/thumb/5/58/American_Breakfast.jpg/350px-American_Breakfast.jpg"
-                                 class="card-img-top" alt="Pancake Plate">
-                            <div class="card-body">
-                                <h5 class="card-title">Classic Pancake Plate</h5>
-                                <p class="card-price">Rs. 2,500</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 menu-item breakfast menu-restaurant">
-                        <div class="card">
-                            <img src="https://i0.wp.com/upload.wikimedia.org/wikipedia/commons/thumb/5/58/American_Breakfast.jpg/350px-American_Breakfast.jpg"
-                                 class="card-img-top" alt="Eggs Benedict Plate">
-                            <div class="card-body">
-                                <h5 class="card-title">Eggs Benedict Plate</h5>
-                                <p class="card-price">Rs. 2,500</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 menu-item breakfast menu-restaurant">
-                        <div class="card">
-                            <img src="https://i0.wp.com/upload.wikimedia.org/wikipedia/commons/thumb/5/58/American_Breakfast.jpg/350px-American_Breakfast.jpg"
-                                 class="card-img-top" alt="Traditional English Breakfast">
-                            <div class="card-body">
-                                <h5 class="card-title">Traditional English Breakfast</h5>
-                                <p class="card-price">Rs. 3,000</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 menu-item lunch menu-restaurant">
-                        <div class="card">
-                            <img src="https://i0.wp.com/upload.wikimedia.org/wikipedia/commons/thumb/5/58/American_Breakfast.jpg/350px-American_Breakfast.jpg"
-                                 class="card-img-top" alt="Grilled Chicken Salad">
-                            <div class="card-body">
-                                <h5 class="card-title">Grilled Chicken Salad</h5>
-                                <p class="card-price">Rs. 2,800</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 menu-item lunch menu-restaurant">
-                        <div class="card">
-                            <img src="https://i0.wp.com/upload.wikimedia.org/wikipedia/commons/thumb/5/58/American_Breakfast.jpg/350px-American_Breakfast.jpg"
-                                 class="card-img-top" alt="Creamy Alfredo Pasta">
-                            <div class="card-body">
-                                <h5 class="card-title">Creamy Alfredo Pasta</h5>
-                                <p class="card-price">Rs. 3,200</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 menu-item dinner menu-restaurant">
-                        <div class="card">
-                            <img src="https://i0.wp.com/upload.wikimedia.org/wikipedia/commons/thumb/5/58/American_Breakfast.jpg/350px-American_Breakfast.jpg"
-                                 class="card-img-top" alt="Juicy Ribeye Steak">
-                            <div class="card-body">
-                                <h5 class="card-title">Juicy Ribeye Steak</h5>
-                                <p class="card-price">Rs. 4,500</p>
-                            </div>
-                        </div>
-                    </div>
+                    <%-- Foods will be loaded here --%>
                 </div>
             </div>
         </div>
@@ -322,7 +259,7 @@
             <div class="row">
                 <!-- Review Display -->
                 <div class="col-md-12">
-                    <div class="reviews-list">
+                    <div class="reviews-list" id="review-list">
 
                         <!-- Single Review -->
                         <div class="review-item">
@@ -349,14 +286,22 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <%
+                User user = (User) session.getAttribute("user");
+                String showReviewSubmission = "display: none;";
+
+                if(user != null && user.getUserType() == UserType.CUSTOMER) {
+                    showReviewSubmission = "";
+                }
+            %>
+            <div class="row" style="<%= showReviewSubmission %>">
                 <!-- Submit Review Form -->
                 <div class="col-md-12">
                     <div class="review-form">
                         <h2 class="header-h">Submit Your Review</h2>
-                        <form action="" method="post" role="form" class="review-form">
+                        <div class="review-form">
                             <div class="form-group">
-                                <label for="rating">Rating:</label>
+                                <label for="comment">Rating:</label>
                                 <div id="star-rating" class="star-rating">
                                     <span class="fa fa-star" data-value="1"></span>
                                     <span class="fa fa-star" data-value="2"></span>
@@ -367,12 +312,12 @@
                                 <input type="hidden" name="rating" id="rating" required>
                             </div>
                             <div class="form-group">
-                                    <textarea class="form-control" name="review" rows="4" placeholder="Your Comment"
+                                    <textarea class="form-control" id="comment" name="review" rows="4" placeholder="Your Comment"
                                               required></textarea>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Submit Review</button>
-                        </form>
+                            <button class="btn btn-primary" onclick="submitReview();">Submit Review</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -461,14 +406,6 @@
                     s.classList.toggle('selected', s.getAttribute('data-value') <= value);
                 });
             });
-        });
-
-        reviewForm.addEventListener('submit', function (event) {
-            event.preventDefault(); // Prevent the default form submission
-            const rating = ratingInput.value;
-            alert(` ${rating}`);
-            //  can submit the form here if needed
-            // this.submit();
         });
     });
 </script>
