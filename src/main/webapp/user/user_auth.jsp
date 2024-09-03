@@ -119,7 +119,7 @@
                 <!-- Login Tab -->
                 <div class="tab-pane fade in active" id="login">
                     <h2>Login</h2>
-                    <form id="login-form" method="POST" action="">
+                    <div id="login-form">
                         <div class="form-group">
                             <label for="login-username">Username</label>
                             <input type="text" class="form-control" id="login-username" placeholder="Enter your Username"
@@ -131,15 +131,15 @@
                                    placeholder="Enter your password" required>
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                            <button class="btn btn-primary btn-lg" onclick="login();">Login</button>
                         </div>
-                    </form>
+                    </div>
                 </div>
 
                 <!-- Register Tab -->
                 <div class="tab-pane fade" id="register">
                     <h2>Register</h2>
-                    <form id="register-form" method="POST" action="register_submit.php">
+                    <div id="register-form">
                         <div class="form-group">
                             <label for="First-name">First Name</label>
                             <input type="text" class="form-control" id="First-name" placeholder="Enter your first name"
@@ -166,9 +166,9 @@
                                    placeholder="Confirm your password" required>
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-success btn-lg">Register</button>
+                            <button class="btn btn-success btn-lg" onclick="register();">Register</button>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
