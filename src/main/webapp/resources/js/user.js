@@ -130,6 +130,7 @@ function createReviewList(reviewObjArray) {
 
         var divHeader = getNewDiv();
         divHeader.classList.add("review-header");
+        divHeader.appendChild(divInfo);
 
         var comment = document.createElement("p");
         comment.innerText = review.comment;
