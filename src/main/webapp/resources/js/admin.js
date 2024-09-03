@@ -22,12 +22,29 @@ function login() {
     request.send(encodedUrl);
 }
 
+function validateUser(fn, ln, un, pw, ut) {
+    if(fn==="" || ln==="" || un==="" || pw==="") {
+        alert("Please fill all the required fields.");
+    } else if(un.length<4 || un.length>20) {
+        alert("Username must be within 4-20 characters.");
+    } else if(pw.length<4 || pw.length>20) {
+        alert("Password must be within 4-20 characters.");
+    } else {
+        return true;
+    }
+    return false;
+}
+
 function register() {
     var fn = document.getElementById("firstName");
     var ln = document.getElementById("lastName");
     var un = document.getElementById("username");
     var pw = document.getElementById("password");
     var ut = document.getElementById("userType");
+
+    if(!validateUser(fn, ln, un, pw, ut)) {
+        return;
+    }
 
     var jsonForm = JSON.stringify({
         "fname": fn.value,
@@ -58,6 +75,10 @@ function updateUser() {
     var un = document.getElementById("editMobile");
     var pw = document.getElementById("editPassword");
     var ut = document.getElementById("editUserType");
+
+    if(!validateUser(fn, ln, un, pw, ut)) {
+        return;
+    }
 
     var jsonForm = JSON.stringify({
         "fname": fn.value,
