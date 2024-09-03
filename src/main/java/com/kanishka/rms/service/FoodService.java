@@ -1,5 +1,6 @@
 package com.kanishka.rms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,5 +31,24 @@ public class FoodService {
 
     public List<Food> findFoodById(List<Long> foodIdList) {
         return foodRepository.findAllById(foodIdList);
+    }
+
+    public List<FoodDTO> findAll(boolean onlyAvailable) {
+        List<FoodDTO> foodDTOList = new ArrayList<>();
+
+        for(Food food : foodRepository.findAll()) {
+            if(onlyAvailable && food.getAvailable() == 0) {
+                continue;
+            }
+            FoodDTO foodDTO = new FoodDTO();
+            foodDTO.setId(food.getId());
+            foodDTO.setName(food.getName());
+            foodDTO.setPrice(food.getPrice());
+            foodDTO.setAvailable(food.getAvailable());
+            foodDTO.setThumbnailUrl(food.getThumbnailUrl());
+
+            foodDTOList.add(foodDTO);
+        }
+        return foodDTOList;
     }
 }
