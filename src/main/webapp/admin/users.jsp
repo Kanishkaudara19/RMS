@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../resources/css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body>
+<body onload="getUserList();">
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-header">
@@ -49,53 +49,20 @@
             <button class="btn">Add User</button>
         </div>
 
-        <!-- Summary Statistics -->
-        <div class="dashboard-cards">
-            <div class="dashboard-card">
-                <i class="fas fa-users"></i>
-                <h3>Total Users</h3>
-                <p>45</p>
-            </div>
-            <div class="dashboard-card">
-                <i class="fas fa-user-check"></i>
-                <h3>Active Users</h3>
-                <p>35</p>
-            </div>
-            <div class="dashboard-card">
-                <i class="fas fa-user-times"></i>
-                <h3>Inactive Users</h3>
-                <p>10</p>
-            </div>
-            <div class="dashboard-card">
-                <i class="fas fa-user-plus"></i>
-                <h3>New Users This Month</h3>
-                <p>5</p>
-            </div>
-        </div>
-
         <!-- Users Table -->
         <div class="table-container">
             <table class="table">
                 <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Username</th>
-                    <th>Role</th>
-                    <th>Actions</th>
-                </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>john_doe</td>
-                    <td>0772635198</td>
-                    <td>Admin</td>
-                    <td>
-                        <button class="btn btn-secondary btn-sm" onclick="openEditModal('John', 'Doe', '+1234567890', 'john.doe@example.com', 'Admin')">Edit</button>
-                    </td>
-                </tr>
-                <!-- More rows as needed -->
+                <tbody id="user-data-table">
+                    <%-- Users will be loaded here --%>
                 </tbody>
             </table>
         </div>
@@ -151,9 +118,9 @@
 
                 <label for="editUserType">User Type:</label>
                 <select id="editUserType" name="userType">
-                    <option value="Admin">Admin</option>
-                    <option value="Delivery Staff">Delivery Staff</option>
-                    <option value="Reception Staff">Reception Staff</option>
+                    <option value="ADMIN">Admin</option>
+                    <option value="DELIVERY_STAFF">Delivery Staff</option>
+                    <option value="RECEPTION_STAFF">Reception Staff</option>
                 </select>
 
                 <button class="btn btn-primary" onclick="updateUser();">Save Changes</button>
@@ -162,11 +129,10 @@
     </div>
 
     <script>
-        function openEditModal(firstName, lastName, mobile, email, userType) {
+        function openEditModal(firstName, lastName, username, userType) {
             document.getElementById('editFirstName').value = firstName;
             document.getElementById('editLastName').value = lastName;
-            document.getElementById('editMobile').value = mobile;
-            document.getElementById('editEmail').value = email;
+            document.getElementById('editMobile').value = username;
             document.getElementById('editUserType').value = userType;
             document.getElementById('editModal').style.display = 'block';
         }
@@ -179,7 +145,7 @@
             if (event.target.classList.contains('modal')) {
                 event.target.style.display = 'none';
             }
-        }
+        };
 
         // Function to open the modal
         function openModal() {
