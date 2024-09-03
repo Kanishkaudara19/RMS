@@ -1,5 +1,7 @@
 const RESPONSE_OK = 200;
 
+// users.jsp - start
+
 function login() {
     var un = document.getElementById("username");
     var pw = document.getElementById("password");
@@ -102,3 +104,58 @@ function updateUser() {
     request.setRequestHeader("Content-Type", "application/json");
     request.send(jsonForm);
 }
+
+function getUserList() {
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if(request.readyState === 4) {
+            if(request.status===RESPONSE_OK) {
+                createUserList(JSON.parse(request.responseText));
+            } else {
+                // Do nothing
+            }
+        }
+    };
+    request.open("GET", "/user/all", true);
+    request.send();
+}
+
+function createUserList(userObjArray) {
+    var tbody = document.getElementById("user-data-table");
+    tbody.innerHTML = "";
+    var td;
+
+    for (var i = 0; i < userObjArray.length; i++) {
+        var user = userObjArray[i];
+        var tr = document.createElement("tr");
+
+        td = document.createElement("td");
+        td.innerText = (i+1) + '';
+        tr.appendChild(td);
+
+        td = document.createElement("td");
+        td.innerText = user.fname + " " + user.lname;
+        tr.appendChild(td);
+
+        td = document.createElement("td");
+        td.innerText = user.username;
+        tr.appendChild(td);
+
+        td = document.createElement("td");
+        td.innerText = user.usertype;
+        tr.appendChild(td);
+
+        var btn = document.createElement("button");
+        btn.classList.add("btn", "btn-secondary", "btn-sm");
+        btn.setAttribute("onClick", "openEditModal('"+ user.fname +"', '"+ user.lname +"', '"+ user.username +"', '"+ user.usertype +"');");
+        btn.innerText = "Edit";
+
+        td = document.createElement("td");
+        td.appendChild(btn);
+        tr.appendChild(td);
+
+        tbody.appendChild(tr);
+    }
+}
+
+// users.jsp - end
