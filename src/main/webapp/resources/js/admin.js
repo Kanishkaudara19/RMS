@@ -44,7 +44,7 @@ function register() {
     var pw = document.getElementById("password");
     var ut = document.getElementById("userType");
 
-    if(!validateUser(fn, ln, un, pw, ut)) {
+    if(!validateUser(fn.value, ln.value, un.value, pw.value, ut.value)) {
         return;
     }
 
