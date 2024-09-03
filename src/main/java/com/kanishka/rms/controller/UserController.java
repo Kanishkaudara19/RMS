@@ -59,6 +59,25 @@ public class UserController {
         return response;
     }
 
+    @PostMapping("/update")
+    public ResponseEntity<String> update(@RequestBody UserDTO userDTO) {
+        ResponseEntity<String> response;
+
+        try {
+            UserType.valueOf(userDTO.getUsertype());
+
+            userService.update(userDTO);
+
+            response = ResponseEntity.ok("User updated successfully!");
+        } catch (IllegalArgumentException ex1) {
+            response = ResponseEntity.badRequest().body("Invalid usertype.");
+        } catch (Exception ex2) {
+            response = ResponseEntity.badRequest().body(ex2.getMessage());
+        }
+
+        return response;
+    }
+
     @PostMapping("/update/contact")
     public ResponseEntity<String> updateContact(@RequestParam("mobile") String mobile,
                                                 @RequestParam("address") String address,

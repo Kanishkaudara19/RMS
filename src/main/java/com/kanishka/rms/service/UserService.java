@@ -55,6 +55,24 @@ public class UserService {
         }
     }
 
+    public void update(UserDTO userDTO) throws Exception {
+        Optional<User> optionalUser = userRepository.findByUsername(userDTO.getUsername());
+
+        if(optionalUser.isEmpty()) {
+            throw new UserNotFoundException("The user is not found!");
+        }
+
+        User user = optionalUser.get();
+        user.setFname(userDTO.getFname());
+        user.setLname(userDTO.getLname());
+        user.setPassword(userDTO.getPassword());
+        user.setUserType(UserType.valueOf(userDTO.getUsertype()));
+
+        if(userRepository.save(user) == null) {
+            throw new Exception("Something went wrong! Please try again later.");
+        }
+    }
+
     public void update(User user, String mobile, String address) throws Exception {
         Optional<User> optionalUser = userRepository.findByUsername(user.getUsername());
 
