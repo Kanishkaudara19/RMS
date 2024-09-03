@@ -1,5 +1,7 @@
 package com.kanishka.rms.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -93,5 +95,10 @@ public class UserController {
             response = ResponseEntity.badRequest().body(ex.getMessage());
         }
         return response;
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        return ResponseEntity.ok().body(userService.findAll());
     }
 }

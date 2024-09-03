@@ -1,5 +1,7 @@
 package com.kanishka.rms.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,5 +100,21 @@ public class UserService {
         }
 
         return optionalUser.get();
+    }
+
+    public List<UserDTO> findAll() {
+        List<UserDTO> userDTOList = new ArrayList<>();
+
+        for(User user : userRepository.findAll()) {
+            UserDTO userDTO = new UserDTO();
+            userDTO.setFname(user.getFname());
+            userDTO.setLname(user.getLname());
+            userDTO.setUsername(user.getUsername());
+            userDTO.setUsertype(user.getUserType().toString());
+
+            userDTOList.add(userDTO);
+        }
+
+        return userDTOList;
     }
 }
