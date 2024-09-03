@@ -2,12 +2,14 @@ package com.kanishka.rms.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kanishka.rms.dto.FoodDTO;
 import com.kanishka.rms.entity.Food;
+import com.kanishka.rms.exception.FoodNotFoundException;
 import com.kanishka.rms.repo.FoodRepository;
 
 @Service
@@ -50,5 +52,18 @@ public class FoodService {
             foodDTOList.add(foodDTO);
         }
         return foodDTOList;
+    }
+
+    public void update(long foodId, int available) throws FoodNotFoundException {
+        Optional<Food> optionalFood = foodRepository.findById(foodId);
+
+        if(optionalFood.isEmpty()) {
+            throw new FoodNotFoundException("Food is not found");
+        }
+
+        Food food = optionalFood.get();
+        food.setAvailable(available);
+
+        foodRepository.save(food);
     }
 }

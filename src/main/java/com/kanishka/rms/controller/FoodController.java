@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kanishka.rms.dto.FoodDTO;
 import com.kanishka.rms.entity.User;
+import com.kanishka.rms.exception.FoodNotFoundException;
 import com.kanishka.rms.model.UserType;
 import com.kanishka.rms.service.FoodService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -73,5 +74,16 @@ public class FoodController {
         }
 
         return ResponseEntity.ok().body(foodDTOList);
+    }
+
+    @GetMapping("/update/availability")
+    public ResponseEntity<String> updateAvailability(@RequestParam("foodId") int foodId,
+                                                     @RequestParam("available") int available) {
+        try {
+            foodService.update(foodId, available);
+            return ResponseEntity.ok().build();
+        } catch (FoodNotFoundException ex) {
+            return ResponseEntity.badRequest().body("Something went wrong! Please try again later.");
+        }
     }
 }
