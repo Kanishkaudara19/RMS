@@ -183,7 +183,7 @@
         }
     </style>
 </head>
-<body>
+<body onload="getFoodList();">
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-header">
@@ -221,7 +221,7 @@
         <h1 style="margin-top: 100px;">Add New Food</h1>
 
         <!-- Food Form -->
-        <form class="food-form">
+        <div class="food-form">
             <div class="form-group">
                 <label for="foodName">Name:</label>
                 <input type="text" id="foodName" name="foodName" placeholder="Enter food name" required>
@@ -234,44 +234,25 @@
                 <label for="foodImage">Image:</label>
                 <input type="file" id="foodImage" name="foodImage" accept="image/*" required>
             </div>
-            <button type="submit" style="margin-top: -20px;">Add Food</button>
-        </form>
+            <button style="margin-top: -20px;" onclick="addFood();">Add Food</button>
+        </div>
 
         <!-- Food Table -->
         <table class="food-table">
             <thead>
-            <tr>
-                <th>Food Name</th>
-                <th>Food Price</th>
-                <th>Image</th>
-                <th>Availability</th>
-            </tr>
+                <tr>
+                    <th>Food Name</th>
+                    <th>Food Price</th>
+                    <th>Image</th>
+                    <th>Availability</th>
+                </tr>
             </thead>
-            <tbody>
-            <tr>
-                <td>Grilled Chicken</td>
-                <td>$12.99</td>
-                <td><img src="../resources/images/food1.jpg" alt="Grilled Chicken"></td>
-                <td class="availability-toggle">
-                    <select>
-                        <option value="1" selected>Available</option>
-                        <option value="0">Unavailable</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>Caesar Salad</td>
-                <td>$8.99</td>
-                <td><img src="../resources/images/food2.jpg" alt="Caesar Salad"></td>
-                <td class="availability-toggle">
-                    <select>
-                        <option value="1" selected>Available</option>
-                        <option value="0">Unavailable</option>
-                    </select>
-                </td>
-            </tr>
+            <tbody id="food-data-table">
+                <%-- Foods will be loaded here --%>
             </tbody>
         </table>
     </div>
+
+    <script src="../resources/js/admin.js"></script>
 </body>
 </html>

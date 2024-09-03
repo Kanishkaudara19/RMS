@@ -159,3 +159,141 @@ function createUserList(userObjArray) {
 }
 
 // users.jsp - end
+
+// foods.jsp - start
+
+function addFood() {
+    var food = document.getElementById("foodName");
+    var price = document.getElementById("foodPrice");
+    var img = document.getElementById("foodImage");
+
+    if(food.value==="") {
+        alert("Please enter the food name.");
+        return;
+    } else if(price.value==="") {
+        alert("Please enter the price.");
+        return;
+    } else if(img.files.length === 0) {
+        alert("Please select an image.");
+        return;
+    }
+
+    var jsonForm = JSON.stringify({
+        "name": food.value,
+        "price": price.value
+    });
+
+    var form = new FormData();
+    form.append("food", new Blob([jsonForm], {type: "application/json"}));
+    form.append("image", img.files[0]);
+
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if(request.readyState === 4) {
+            if(request.status===RESPONSE_OK) {
+                alert("Food is added successfully!");
+                food.value = "";
+                price.value = "";
+            } else {
+                alert(request.responseText);
+            }
+        }
+    };
+    request.open("POST", "/food/insert", true);
+    request.send(form);
+}
+
+function getFoodList() {
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if(request.readyState === 4) {
+            if(request.status===RESPONSE_OK) {
+                createFoodList(JSON.parse(request.responseText));
+            } else {
+                // Do nothing
+            }
+        }
+    };
+    request.open("GET", "/food/all", true);
+    request.send();
+}
+
+function createFoodList(foodObjArray) {
+    var tbody = document.getElementById("food-data-table");
+    tbody.innerHTML = "";
+    var td;
+
+    foodObjArray.forEach((food) => {
+        var tr = document.createElement("tr");
+
+        // Append Name
+        td = document.createElement("td");
+        td.innerText = food.name;
+        tr.appendChild(td);
+
+        // Append Price
+        td = document.createElement("td");
+        td.innerText = food.price;
+        tr.appendChild(td);
+
+        // Append Image
+        var img = document.createElement("img");
+        img.alt = food.name;
+        img.src = "../uploads/foods/" + food.thumbnailUrl;
+
+        td = document.createElement("td");
+        td.appendChild(img);
+        tr.appendChild(td);
+
+        // Append Availability
+        var select = document.createElement("select");
+        select.setAttribute("onChange", "updateAvailability("+ food.id +");")
+        select.id = "availability-select-" + food.id;
+
+        var optionAv = document.createElement("option");
+        optionAv.value = "1";
+        optionAv.innerText = "Available";
+
+        var optionUn = document.createElement("option");
+        optionUn.value = "0";
+        optionUn.innerText = "Unavailable";
+
+        if(food.available === 1) {
+            optionAv.setAttribute("selected", "true");
+        } else {
+            optionUn.setAttribute("selected", "true");
+        }
+
+        select.appendChild(optionAv);
+        select.appendChild(optionUn);
+
+        td = document.createElement("td");
+        td.classList.add("availability-toggle");
+        td.appendChild(select);
+        tr.appendChild(td);
+
+        // Append Table Row
+        tbody.appendChild(tr);
+    });
+}
+
+function updateAvailability(foodId) {
+    var availability = document.getElementById("availability-select-" + foodId).value;
+
+    var encodeParam = "?foodId="+ encodeURIComponent(foodId) +"&available=" + encodeURIComponent(availability);
+
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if(request.readyState === 4) {
+            if(request.status===RESPONSE_OK) {
+                alert("Availability updated successfully!");
+            } else {
+                alert(request.responseText);
+            }
+        }
+    };
+    request.open("GET", "/food/update/availability" + encodeParam, true);
+    request.send();
+}
+
+// foods.jsp - end
