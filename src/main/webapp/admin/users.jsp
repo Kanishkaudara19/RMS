@@ -106,28 +106,28 @@
         <div class="modal-content">
             <span class="close-button" onclick="closeModal()">&times;</span>
             <h2>Add New User</h2>
-            <form id="addUserForm">
+            <div class="form">
                 <label for="firstName">First Name:</label>
                 <input type="text" id="firstName" name="firstName" required>
 
                 <label for="lastName">Last Name:</label>
                 <input type="text" id="lastName" name="lastName" required>
 
-                <label for="mobile">Username:</label>
-                <input type="tel" id="mobile" name="mobile" required>
+                <label for="username">Username:</label>
+                <input type="tel" id="username" name="username" required>
 
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
 
                 <label for="userType">User Type:</label>
                 <select id="userType" name="userType" required>
-                    <option value="admin">Admin</option>
-                    <option value="delivery">Delivery Staff</option>
-                    <option value="reception">Reception Staff</option>
+                    <option value="ADMIN">Admin</option>
+                    <option value="DELIVERY_STAFF">Delivery Staff</option>
+                    <option value="RECEPTION_STAFF">Reception Staff</option>
                 </select>
 
-                <button type="submit" class="btn btn-primary">Add User</button>
-            </form>
+                <button class="btn btn-primary" onclick="register();">Add User</button>
+            </div>
         </div>
     </div>
 
@@ -136,7 +136,7 @@
         <div class="modal-content">
             <span class="close" onclick="closeEditModal()">&times;</span>
             <h2>Edit User</h2>
-            <form id="editUserForm">
+            <div class="form">
                 <label for="editFirstName">First Name:</label>
                 <input type="text" id="editFirstName" name="firstName" required>
 
@@ -144,9 +144,9 @@
                 <input type="text" id="editLastName" name="lastName" required>
 
                 <label for="editMobile">Username:</label>
-                <input type="text" id="editMobile" name="mobile" required>
+                <input type="text" id="editMobile" name="mobile" required disabled>
 
-                <label for="editEmail">Password:</label>
+                <label for="editPassword">Password:</label>
                 <input type="password" id="editPassword" name="password" required>
 
                 <label for="editUserType">User Type:</label>
@@ -156,25 +156,12 @@
                     <option value="Reception Staff">Reception Staff</option>
                 </select>
 
-                <button type="submit" class="btn btn-primary">Save Changes</button>
-            </form>
+                <button class="btn btn-primary" onclick="updateUser();">Save Changes</button>
+            </div>
         </div>
     </div>
 
     <script>
-        function openViewModal(firstName, lastName, mobile, email, userType) {
-            document.getElementById('viewFirstName').innerText = firstName;
-            document.getElementById('viewLastName').innerText = lastName;
-            document.getElementById('viewMobile').innerText = mobile;
-            document.getElementById('viewEmail').innerText = email;
-            document.getElementById('viewUserType').innerText = userType;
-            document.getElementById('viewModal').style.display = 'block';
-        }
-
-        function closeViewModal() {
-            document.getElementById('viewModal').style.display = 'none';
-        }
-
         function openEditModal(firstName, lastName, mobile, email, userType) {
             document.getElementById('editFirstName').value = firstName;
             document.getElementById('editLastName').value = lastName;
@@ -209,10 +196,11 @@
             if (event.target === document.getElementById("addUserModal")) {
                 closeModal();
             }
-        }
+        };
 
         // Example function to trigger modal open (you can attach this to a button)
         document.querySelector(".page-header .btn").addEventListener("click", openModal);
     </script>
+    <script src="../resources/js/admin.js"></script>
 </body>
 </html>
