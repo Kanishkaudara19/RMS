@@ -295,15 +295,15 @@ body {
 }
 
 /* Form Elements */
-form label {
+.form label {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
     color: #333;
 }
 
-form input,
-form select {
+.form input,
+.form select {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -311,11 +311,11 @@ form select {
     border-radius: 5px;
 }
 
-form input[type="tel"] {
+.form input[type="tel"] {
     -moz-appearance: textfield; /* Remove spinner for input type tel */
 }
 
-form button {
+.form button {
     background-color: #4CAF50;
     color: #ffffff;
     border: none;
@@ -326,7 +326,7 @@ form button {
     transition: background-color 0.3s ease;
 }
 
-form button:hover {
+.form button:hover {
     background-color: #45A049;
 }
 
@@ -354,7 +354,7 @@ form button:hover {
     margin-top: 0;
 }
 
-.modal form {
+.modal .form {
     display: grid;
     gap: 15px;
 }
