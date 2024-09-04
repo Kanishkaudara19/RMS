@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,9 @@ import org.springframework.stereotype.Service;
 import com.kanishka.rms.dto.DetailedOrderDTO;
 import com.kanishka.rms.dto.OrderDTO;
 import com.kanishka.rms.entity.*;
+import com.kanishka.rms.exception.OrderNotFoundException;
 import com.kanishka.rms.model.OrderType;
 import com.kanishka.rms.model.PaymentMethod;
-import com.kanishka.rms.model.QueuedStatus;
 import com.kanishka.rms.repo.InvoiceRepository;
 import com.kanishka.rms.repo.OrderFoodRepository;
 import com.kanishka.rms.repo.OrderRepository;
@@ -35,19 +36,23 @@ public class OrderService {
     private final FoodService foodService;
     @Autowired
     private final StatusService statusService;
+    @Autowired
+    private final OrderStatusService orderStatusService;
 
     public OrderService(OrderRepository orderRepository,
                         InvoiceRepository invoiceRepository,
                         OrderFoodRepository orderFoodRepository,
                         UserService userService,
                         FoodService foodService,
-                        StatusService statusService) {
+                        StatusService statusService,
+                        OrderStatusService orderStatusService) {
         this.orderRepository = orderRepository;
         this.invoiceRepository = invoiceRepository;
         this.orderFoodRepository = orderFoodRepository;
         this.userService = userService;
         this.foodService = foodService;
         this.statusService = statusService;
+        this.orderStatusService = orderStatusService;
     }
 
     public void insert(OrderDTO orderDTO) throws Exception {
@@ -55,7 +60,7 @@ public class OrderService {
             User customer = userService.findById(orderDTO.getUserId());
             OrderType orderType = OrderType.valueOf(orderDTO.getOrderType());
             String orderId = generateOrderId();
-            Status status = statusService.findStatusByName(new QueuedStatus().getName());
+            Status status = statusService.findStatusByName(orderStatusService.getStatus("QUEUED").getName());
             LocalDateTime dateTime = LocalDateTime.now();
 
             // Create Order object
@@ -161,6 +166,21 @@ public class OrderService {
             foodList.add(foodDTO);
         }
         return foodList;
+    }
+
+    public Order updateStatus(String orderId, String statusName) throws Exception {
+        Optional<Order> optionalOrder = orderRepository.findByOrderId(orderId);
+
+        if(optionalOrder.isEmpty()) {
+            throw new OrderNotFoundException("Order id does not exists");
+        }
+
+        com.kanishka.rms.model.Status status = orderStatusService.getStatus(statusName);
+
+        Order order = optionalOrder.get();
+        order.setStatus(statusService.findStatusByName(status.getName()));
+
+        return orderRepository.save(order);
     }
 
     private String generateOrderId() {
