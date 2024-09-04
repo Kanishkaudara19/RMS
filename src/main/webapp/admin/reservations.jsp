@@ -1,4 +1,14 @@
+<%@ page import="com.kanishka.rms.entity.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+    User user = (User) session.getAttribute("user");
+
+    if(user==null) {
+        response.sendRedirect("index.jsp");
+    }
+%>
+
 <html>
 <head>
     <meta charset="UTF-8">
@@ -8,7 +18,7 @@
     <link rel="stylesheet" href="../resources/css/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body>
+<body onload="getReservationList();">
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-header">
@@ -52,29 +62,17 @@
         <div class="table-container">
             <table class="table">
                 <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Customer Name</th>
-                    <th>Date Time</th>
-                    <th>Seats</th>
-                    <th>Place</th>
-                    <th>Actions</th>
-                </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Customer Name</th>
+                        <th>Date Time</th>
+                        <th>Seats</th>
+                        <th>Place</th>
+                        <th>Actions</th>
+                    </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>John Doe</td>
-                    <td>2024-09-05 19:00:00</td>
-                    <td>4</td>
-                    <td>Mathara</td>
-                    <td>
-                        <button class="btn btn-secondary btn-sm"
-                                onclick="openEditModal('John Doe', '2024-09-05')">Edit</button>
-                        <button class="btn btn-danger btn-sm">Delete</button>
-                    </td>
-                </tr>
-                <!-- More rows as needed -->
+                <tbody id="reservation-data-table">
+                    <!-- Reservations will be loaded here -->
                 </tbody>
             </table>
         </div>
@@ -83,30 +81,35 @@
     <!-- Edit Modal -->
     <div id="editModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeEditModal()">&times;</span>
+            <span class="close" onclick="closeReservationModal()">&times;</span>
             <h2>Edit Reservation</h2>
-            <form>
-                <div class="form-group">
+            <div>
+                <div class="form-group" style="margin-bottom: 25px;">
+                    <label for="rid">Customer Name:</label>
+                    <input type="text" id="rid" name="editName" disabled>
+                </div>
+                <div class="form-group" style="margin-bottom: 25px;">
                     <label for="editName">Customer Name:</label>
                     <input type="text" id="editName" name="editName" disabled>
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="margin-bottom: 25px;">
                     <label for="editDate">Date:</label>
-                    <input type="date" id="editDate" name="editDate" required>
+                    <input type="datetime-local" id="editDate" name="editDate" required>
                 </div>
-                <button type="submit" class="btn-primary">Save Changes</button>
-            </form>
+                <button class="btn-primary" onclick="updateReservation();">Save Changes</button>
+            </div>
         </div>
     </div>
 
     <script>
-        function openEditModal(name, date) {
+        function openReservationModal(id, name, date) {
+            document.getElementById('rid').value = id;
             document.getElementById('editName').value = name;
             document.getElementById('editDate').value = date;
             document.getElementById('editModal').style.display = 'block';
         }
 
-        function closeEditModal() {
+        function closeReservationModal() {
             document.getElementById('editModal').style.display = 'none';
         }
 
@@ -116,5 +119,6 @@
             }
         }
     </script>
+    <script src="../resources/js/admin.js"></script>
 </body>
 </html>
