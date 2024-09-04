@@ -1,4 +1,14 @@
+<%@ page import="com.kanishka.rms.entity.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+    User user = (User) session.getAttribute("user");
+
+    if(user == null) {
+        response.sendRedirect("user_auth.jsp");
+    }
+%>
+
 <html>
 <head>
     <meta charset="UTF-8">
@@ -159,7 +169,7 @@
 
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
-                    <form class="form" method="POST" action="">
+                    <div class="form">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -172,10 +182,10 @@
                                 <div class="form-group">
                                     <label for="location">Select Location</label>
                                     <select class="form-control" id="location" required>
-                                        <option disabled selected>Select restaurant location</option>
-                                        <option value="colombo">Colombo</option>
-                                        <option value="kandy">Mathara</option>
-                                        <option value="galle">Galle</option>
+                                        <option value="0" disabled selected>Select restaurant location</option>
+                                        <option value="COLOMBO">Colombo</option>
+                                        <option value="MATHARA">Mathara</option>
+                                        <option value="GALLE">Galle</option>
                                     </select>
                                 </div>
                             </div>
@@ -185,24 +195,15 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="date">Date</label>
-                                    <input type="date" class="form-control" id="date" required>
+                                    <input type="datetime-local" class="form-control" id="datetime" required>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="time">Time</label>
-                                    <input type="time" class="form-control" id="time" required>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group seat-selector">
                                     <label for="seats">Select Number of People</label>
                                     <button type="button" class="btn minus" id="decrease-seats"><i
                                             class="fa fa-minus"></i></button>
-                                    <input type="text" class="form-control" id="seats" value="1" readonly>
+                                    <input type="text" class="form-control" id="seats" value="0" readonly>
                                     <button type="button" class="btn plus" id="increase-seats"><i
                                             class="fa fa-plus"></i></button>
                                 </div>
@@ -210,9 +211,9 @@
                         </div>
 
                         <div class="text-center" style="margin-top: 60px;">
-                            <button type="submit" class="btn btn-primary btn-lg">Reserve Now</button>
+                            <button class="btn btn-primary btn-lg" onclick="reserveTable();">Reserve Now</button>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -246,7 +247,7 @@
             const decreaseSeatsButton = document.getElementById('decrease-seats');
             const seatsInput = document.getElementById('seats');
 
-            let seats = 1;
+            let seats = 0;
             const maxSeats = 10;
 
             increaseSeatsButton.addEventListener('click', function () {
@@ -257,7 +258,7 @@
             });
 
             decreaseSeatsButton.addEventListener('click', function () {
-                if (seats > 1) {
+                if (seats > 0) {
                     seats--;
                     seatsInput.value = seats;
                 }
