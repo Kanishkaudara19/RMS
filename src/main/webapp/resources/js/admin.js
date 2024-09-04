@@ -410,6 +410,7 @@ function updateOrderStatus() {
     request.onreadystatechange = function () {
         if(request.readyState === 4) {
             alert(request.responseText);
+            getOrderList();
         }
     };
 
@@ -418,3 +419,108 @@ function updateOrderStatus() {
 }
 
 // orders.jsp
+
+// reservation.jsp
+
+function getReservationList() {
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if(request.readyState === 4) {
+            if(request.status===RESPONSE_OK) {
+                createReservationList(JSON.parse(request.responseText));
+            } else {
+                // Do nothing
+            }
+        }
+    };
+    request.open("GET", "/reservation/all", true);
+    request.send();
+}
+
+function createReservationList(reservationObjArray) {
+    var tbody = document.getElementById("reservation-data-table");
+    tbody.innerHTML = "";
+
+    var td;
+
+    reservationObjArray.forEach((reservation) => {
+        var tr = document.createElement("tr");
+
+        td = document.createElement("td");
+        td.innerText = reservation.id;
+        tr.appendChild(td);
+
+        td = document.createElement("td");
+        td.innerText = reservation.customerName;
+        tr.appendChild(td);
+
+        td = document.createElement("td");
+        td.innerText = reservation.datetime;
+        tr.appendChild(td);
+
+        td = document.createElement("td");
+        td.innerText = reservation.noOfSeats;
+        tr.appendChild(td);
+
+        td = document.createElement("td");
+        td.innerText = reservation.branch;
+        tr.appendChild(td);
+
+        // Create edit button
+        var editBtn = document.createElement("button");
+        editBtn.classList.add("btn", "btn-secondary", "btn-sm");
+        editBtn.innerText = "Edit";
+        editBtn.setAttribute("onClick",
+            "openReservationModal('" + reservation.id + "', '" + reservation.customerName + "', '" + reservation.datetime + "');");
+
+        var deleteBtn = document.createElement("button");
+        deleteBtn.classList.add("btn", "btn-danger", "btn-sm");
+        deleteBtn.innerText = "Delete";
+        deleteBtn.setAttribute("onClick",
+            "deleteReservation('" + reservation.id + "');");
+
+        td = document.createElement("td");
+        td.appendChild(editBtn);
+        td.appendChild(deleteBtn);
+        tr.appendChild(td);
+
+        tbody.appendChild(tr);
+    });
+}
+
+function updateReservation() {
+    var rid = document.getElementById("rid").value;
+    var datetime = document.getElementById("editDate").value;
+
+    var encodeParam = "?rid=" + encodeURIComponent(rid) + "&datetime=" + encodeURIComponent(datetime);
+
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if(request.readyState === 4) {
+            alert(request.responseText);
+            getReservationList();
+        }
+    };
+
+    request.open("GET", "/reservation/update" + encodeParam , true);
+    request.send();
+}
+
+function deleteReservation(rid) {
+    if(!confirm("Are you sure you want to delete this reservation?")) {
+        return;
+    }
+
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if(request.readyState === 4) {
+            alert(request.responseText);
+            getReservationList();
+        }
+    };
+
+    request.open("GET", "/reservation/delete?rid=" + encodeURIComponent(rid) , true);
+    request.send();
+}
+
+// reservation.jsp
