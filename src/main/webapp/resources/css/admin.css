@@ -365,6 +365,7 @@ body {
 
 .modal input[type="text"],
 .modal input[type="date"],
+.modal input[type="datetime-local"],
 .modal select {
     width: 100%;
     padding: 10px;
