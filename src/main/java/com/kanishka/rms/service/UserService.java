@@ -82,8 +82,16 @@ public class UserService {
             throw new UserNotFoundException("User not found");
         }
 
-        Contact contact = new Contact();
-        contact.setCustomer(optionalUser.get());
+        Optional<Contact> optionalContact = contactRepository.findByCustomer(optionalUser.get());
+        Contact contact;
+
+        if(optionalContact.isPresent()) {
+            contact = optionalContact.get();
+        } else {
+            contact = new Contact();
+            contact.setCustomer(optionalUser.get());
+        }
+
         contact.setMobile(mobile);
         contact.setAddress(address);
 
