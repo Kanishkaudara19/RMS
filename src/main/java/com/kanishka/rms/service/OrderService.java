@@ -131,11 +131,17 @@ public class OrderService {
             DetailedOrderDTO orderDTO = new DetailedOrderDTO();
 
             User customer = order.getCustomer();
+            String address = userService.findContactByUser(customer).getAddress();
+            String status = order.getStatus().getName();
+
+            if(order.getOrderType() != OrderType.DELIVERY) {
+                address = order.getOrderType().name();
+            }
 
             orderDTO.setId(order.getId());
             orderDTO.setOrderId(order.getOrderId());
             orderDTO.setCustomerName(customer.getFname() +" "+ customer.getLname());
-            orderDTO.setAddress(userService.findContactByUser(customer).getAddress());
+            orderDTO.setAddress(address);
             orderDTO.setDatetime(order.getDateTime().format(formatter));
             orderDTO.setStatus(order.getStatus().getName());
             orderDTO.setFoodList(getFoodList(order));
