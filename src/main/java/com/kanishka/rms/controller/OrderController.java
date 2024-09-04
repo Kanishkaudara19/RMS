@@ -2,13 +2,16 @@ package com.kanishka.rms.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kanishka.rms.dto.OrderDTO;
+import com.kanishka.rms.entity.User;
+import com.kanishka.rms.exception.UserNotFoundException;
 import com.kanishka.rms.service.OrderService;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/order")
@@ -20,11 +23,17 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @GetMapping("/insert")
-    public ResponseEntity<String> insertOrder(@RequestBody OrderDTO orderDTO) {
+    @PostMapping("/insert")
+    public ResponseEntity<String> insertOrder(@RequestBody OrderDTO orderDTO, HttpServletRequest request) {
         ResponseEntity<String> response;
 
         try {
+            User user = (User) request.getSession().getAttribute("user");
+            if(user == null) {
+                throw new UserNotFoundException("User have not logged in.");
+            }
+            orderDTO.setUserId(user.getId());
+
             orderService.insert(orderDTO);
 
             response = ResponseEntity.ok("Successfully added the order!");
