@@ -20,7 +20,7 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-    @GetMapping("/insert")
+    @PostMapping("/insert")
     public ResponseEntity<String> insertReservation(@RequestBody ReservationDTO reservationDTO,
                                                     HttpServletRequest request) {
         ResponseEntity<String> response;
