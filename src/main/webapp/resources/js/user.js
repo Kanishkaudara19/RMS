@@ -337,3 +337,56 @@ function addOrder(locationEl, orderTypeEl, paymentMethodEl) {
 }
 
 // order.jsp
+
+// reservation.jsp
+
+function reserveTable() {
+    var mobileEl = document.getElementById("phone");
+    var locationEl = document.getElementById("location");
+    var datetimeEl = document.getElementById("datetime");
+    var seatsEl = document.getElementById("seats");
+
+    if(mobileEl.value === "") {
+        alert("Please enter your mobile number");
+    } else if(locationEl.value==0) {
+        alert("Please select a location");
+    } else if(!datetimeEl.value) {
+        alert("Please select a date and a time");
+    } else if(seatsEl.value == 0) {
+        alert("Please enter a seat count");
+    } else {
+        var addressEl = document.createElement("input");
+        addressEl.type = "text";
+        addressEl.value = "N/A";
+        addContact(mobileEl, addressEl);
+        addReservation(locationEl, datetimeEl, seatsEl);
+    }
+}
+
+function addReservation(locationEl, datetimeEl, seatsEl) {
+    var jsonForm = JSON.stringify({
+        "branch": locationEl.value,
+        "datetime": datetimeEl.value,
+        "noOfSeats": seatsEl.value
+    });
+
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if(request.readyState === 4) {
+            if(request.status===RESPONSE_OK) {
+                alert("Your seats are reserved successfully!");
+
+                locationEl.value = 0;
+                datetimeEl.value = "";
+                seatsEl.value = 0;
+            } else {
+                alert(request.responseText);
+            }
+        }
+    };
+    request.open("POST", "/reservation/insert", true);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(jsonForm);
+}
+
+// reservation.jsp
