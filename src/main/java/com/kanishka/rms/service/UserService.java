@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.kanishka.rms.dto.UserDTO;
 import com.kanishka.rms.entity.Contact;
 import com.kanishka.rms.entity.User;
+import com.kanishka.rms.exception.ContactNotFoundException;
 import com.kanishka.rms.exception.UserAlreadyExistsException;
 import com.kanishka.rms.exception.UserNotFoundException;
 import com.kanishka.rms.model.UserType;
@@ -124,5 +125,15 @@ public class UserService {
         }
 
         return userDTOList;
+    }
+
+    public Contact findContactByUser(User user) throws ContactNotFoundException {
+        Optional<Contact> optionalContact = contactRepository.findByCustomer(user);
+
+        if(optionalContact.isEmpty()) {
+            throw new ContactNotFoundException("Contact details not found");
+        }
+
+        return optionalContact.get();
     }
 }
