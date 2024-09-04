@@ -28,7 +28,7 @@
         font-weight: bold;
     }
 </style>
-<body>
+<body onload="getOrderList();">
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-header">
@@ -69,29 +69,18 @@
         <div class="table-container">
             <table class="table">
                 <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Order ID</th>
-                    <th>Customer Name</th>
-                    <th>Delivery Address</th>
-                    <th>Order Date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Order ID</th>
+                        <th>Customer Name</th>
+                        <th>Delivery Address</th>
+                        <th>Order Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>#1234</td>
-                    <td>John Doe</td>
-                    <td>123 Elm Street</td>
-                    <td>2024-09-01</td>
-                    <td>Delivered</td>
-                    <td>
-                        <button class="btn btn-secondary btn-sm">Update</button>
-                    </td>
-                </tr>
-                <!-- More rows as needed -->
+                <tbody id="order-data-table">
+                    <!-- Order data will be loaded here -->
                 </tbody>
             </table>
         </div>
@@ -100,64 +89,51 @@
     <!-- Edit Order Modal -->
     <div id="editOrderModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('editOrderModal')">&times;</span>
+            <span class="close-btn" onclick="closeModal()">&times;</span>
             <h2>Edit Order</h2>
-            <form id="editOrderForm">
+            <div id="editOrderForm">
                 <label for="orderId">Order ID:</label>
-                <input type="text" id="orderId" name="orderId" value="#1234" readonly disabled>
+                <input type="text" id="orderId" name="orderId" value="" readonly disabled>
 
                 <!-- Food Items List -->
-                <div id="foodItemsContainer">
+                <div id="foodItemsContainer" style="margin-bottom: 25px;">
                     <h3>Food Items</h3>
                     <table class="invoice-table">
                         <thead>
-                        <tr>
-                            <th>Food Name</th>
-                            <th>Quantity</th>
-                        </tr>
+                            <tr>
+                                <th>Food Name</th>
+                                <th>Quantity</th>
+                            </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <td>Pizza</td>
-                            <td>2</td>
-                        </tr>
-                        <tr>
-                            <td>Burger</td>
-                            <td>1</td>
-                        </tr>
-                        <!-- Repeat for additional food items -->
+                        <tbody id="food-data-table">
+                            <!-- Order foods will be loaded here -->
                         </tbody>
                     </table>
                 </div>
 
-                <label for="status">Status:</label>
+                <label for="status" style="margin-top: 25px !important;">Status:</label>
                 <select id="status" name="status">
-                    <option value="pending">Pending</option>
-                    <option value="delivered" selected>Delivered</option>
-                    <option value="canceled">Canceled</option>
+                    <option value="Queued" selected disabled>Queued</option>
+                    <option value="Prepare">Prepare</option>
+                    <option value="Deliver">Deliver</option>
+                    <option value="Serve">Serve</option>
+                    <option value="Completed">Completed</option>
                 </select>
 
-                <button type="submit" class="btn btn-primary">Update Order</button>
-                <button type="button" class="btn btn-secondary" onclick="closeModal('editOrderModal')">Cancel</button>
-            </form>
+                <button class="btn btn-primary" style="margin-top: 15px;" onclick="updateOrderStatus();">Update Order</button>
+                <button type="button" class="btn btn-secondary" style="margin-top: 15px;" onclick="closeModal()">Cancel</button>
+            </div>
         </div>
     </div>
 
     <script>
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = "block";
+        function openModal() {
+            document.getElementById("editOrderModal").style.display = "block";
         }
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = "none";
+        function closeModal() {
+            document.getElementById("editOrderModal").style.display = "none";
         }
-
-        // Example: Open edit modal when clicking the "Edit" button
-        document.querySelectorAll('.btn-secondary').forEach(button => {
-            button.addEventListener('click', () => {
-                openModal('editOrderModal');
-            });
-        });
     </script>
     <script src="../resources/js/admin.js"></script>
 </body>
