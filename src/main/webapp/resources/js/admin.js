@@ -401,7 +401,20 @@ function openEditModal(orderId, status) {
 }
 
 function updateOrderStatus() {
+    var orderId = document.getElementById("orderId").value;
+    var status = document.getElementById("status").value;
 
+    var encodeParam = "?oid=" + encodeURIComponent(orderId) + "&status=" + encodeURIComponent(status);
+
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if(request.readyState === 4) {
+            alert(request.responseText);
+        }
+    };
+
+    request.open("GET", "/order/update" + encodeParam , true);
+    request.send();
 }
 
 // orders.jsp
