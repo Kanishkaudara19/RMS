@@ -1,12 +1,16 @@
 package com.kanishka.rms.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kanishka.rms.dto.DetailedOrderDTO;
 import com.kanishka.rms.dto.OrderDTO;
 import com.kanishka.rms.entity.User;
 import com.kanishka.rms.exception.UserNotFoundException;
@@ -42,5 +46,15 @@ public class OrderController {
         }
 
         return response;
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<DetailedOrderDTO>> getAllOrders() {
+        try {
+            List<DetailedOrderDTO> detailedOrderDTOList = orderService.getOrderList();
+            return ResponseEntity.ok().body(detailedOrderDTOList);
+        } catch (Exception ignored) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

@@ -2,6 +2,8 @@ package com.kanishka.rms.service;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -9,6 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kanishka.rms.dto.DetailedOrderDTO;
 import com.kanishka.rms.dto.OrderDTO;
 import com.kanishka.rms.entity.*;
 import com.kanishka.rms.model.OrderType;
@@ -118,6 +121,40 @@ public class OrderService {
                 .toList();
 
         return foodService.findFoodById(foodIdList);
+    }
+
+    public List<DetailedOrderDTO> getOrderList() throws Exception {
+        List<DetailedOrderDTO> detailedOrderList = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        for(Order order : orderRepository.findAll()) {
+            DetailedOrderDTO orderDTO = new DetailedOrderDTO();
+
+            User customer = order.getCustomer();
+
+            orderDTO.setId(order.getId());
+            orderDTO.setOrderId(order.getOrderId());
+            orderDTO.setCustomerName(customer.getFname() +" "+ customer.getLname());
+            orderDTO.setAddress(userService.findContactByUser(customer).getAddress());
+            orderDTO.setDatetime(order.getDateTime().format(formatter));
+            orderDTO.setStatus(order.getStatus().getName());
+            orderDTO.setFoodList(getFoodList(order));
+
+            detailedOrderList.add(orderDTO);
+        }
+        return detailedOrderList;
+    }
+
+    private List<DetailedOrderDTO.DetailedOrderFoodDTO> getFoodList(Order order) {
+        List<DetailedOrderDTO.DetailedOrderFoodDTO> foodList = new ArrayList<>();
+
+        for(OrderFood orderFood : orderFoodRepository.findAllByOrder(order)) {
+            DetailedOrderDTO.DetailedOrderFoodDTO foodDTO = new DetailedOrderDTO.DetailedOrderFoodDTO();
+            foodDTO.setName(orderFood.getFood().getName());
+            foodDTO.setQty(orderFood.getQuantity());
+            foodList.add(foodDTO);
+        }
+        return foodList;
     }
 
     private String generateOrderId() {
