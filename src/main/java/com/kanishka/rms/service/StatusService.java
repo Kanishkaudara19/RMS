@@ -21,9 +21,16 @@ public class StatusService {
     public Status findStatusByName(String statusName) throws StatusNotFoundException {
         Optional<Status> optionalStatus = statusRepository.findStatusByName(statusName);
 
+        Status status;
+
         if(optionalStatus.isEmpty()) {
-            throw new StatusNotFoundException("Status not found: " + statusName);
+            Status newStatus = new Status();
+            newStatus.setName(statusName);
+
+            status = statusRepository.save(newStatus);
+        } else {
+            status = optionalStatus.get();
         }
-        return optionalStatus.get();
+        return status;
     }
 }
