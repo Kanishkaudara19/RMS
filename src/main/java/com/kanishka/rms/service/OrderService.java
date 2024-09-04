@@ -81,7 +81,12 @@ public class OrderService {
         String branch = orderDTO.getBranch();
 
         // Get total price
-        int totalPrice = foodList.stream().mapToInt(Food::getPrice).sum();
+        Map<Long, Integer> foodQuantities = orderDTO.getFoodList().stream()
+                .collect(Collectors.toMap(OrderDTO.OrderFoodDTO::getId, OrderDTO.OrderFoodDTO::getQty));
+
+        int totalPrice = foodList.stream()
+                .mapToInt(food -> food.getPrice() * foodQuantities.getOrDefault(food.getId(), 1))
+                .sum();
 
         // Create Invoice object
         Invoice invoice = new Invoice();
