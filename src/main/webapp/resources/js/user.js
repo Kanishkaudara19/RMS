@@ -11,7 +11,12 @@ function getFoodList() {
     request.onreadystatechange = function () {
         if (request.readyState === 4) {
             if (request.status === RESPONSE_OK) {
-                createFoodList(JSON.parse(request.responseText));
+
+                if(window.location.pathname.includes("index.jsp")) {
+                    createFoodList(JSON.parse(request.responseText));
+                } else {
+                    createFoodOptions(JSON.parse(request.responseText));
+                }
             } else {
                 // Do nothing
             }
@@ -54,6 +59,26 @@ function createFoodList(foodObjArray) {
         divMenuItem.appendChild(divCard);
 
         menu.appendChild(divMenuItem);
+    });
+}
+
+function createFoodOptions(foodObjArray) {
+    var dishItemSelect = document.getElementById("dish");
+
+    var firstOption = document.createElement("option");
+    firstOption.value = "0";
+    firstOption.setAttribute("disabled", "true");
+    firstOption.setAttribute("selected", "true");
+    firstOption.innerText = "Select Food Item";
+    dishItemSelect.appendChild(firstOption);
+
+    foodObjArray.forEach((food) => {
+        var option = document.createElement("option");
+        option.value = food.id;
+        option.innerText = food.name;
+        option.setAttribute("data-price", food.price);
+
+        dishItemSelect.appendChild(option);
     });
 }
 
@@ -163,7 +188,7 @@ function login() {
     request.onreadystatechange = function () {
         if(request.readyState === 4) {
             if(request.status===RESPONSE_OK) {
-                window.location = "index.jsp";
+                window.history.back();
             } else {
                 alert(request.responseText);
             }
@@ -229,3 +254,86 @@ function register() {
 }
 
 // user_auth.jsp
+
+// order.jsp
+
+function placeOrder() {
+    var phoneEl= document.getElementById("phone");
+    var addressEl= document.getElementById("address");
+    var locationEl= document.getElementById("invoice-location");
+    var orderTypeEl= document.getElementById("invoice-order-type");
+    var paymentMethodEl = document.querySelector('input[name="paymentMethod"]:checked');
+
+    if(phoneEl.value === "" || addressEl.value === "") {
+        alert("Please fill contact details");
+    } else if(locationEl.value == 0 || orderTypeEl.value == 0 ) {
+        alert("Please select restaurant location and order type");
+    } else if(invoiceItems.length === 0) {
+        alert("Please add dishes to your order");
+    } else {
+        addContact(phoneEl, addressEl);
+        addOrder(locationEl, orderTypeEl, paymentMethodEl);
+    }
+}
+
+function addContact(phoneEl, addressEl) {
+    var encodedUrl = "mobile=" + encodeURIComponent(phoneEl.value) +
+        "&address=" + encodeURIComponent(addressEl.value);
+
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if(request.readyState === 4) {
+            if(request.status===RESPONSE_OK) {
+                phoneEl.value = "";
+                addressEl.value = "";
+            } else {
+                alert(request.responseText);
+            }
+        }
+    };
+    request.open("POST", "/user/update/contact", true);
+    request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    request.send(encodedUrl);
+}
+
+function createFoodListArray() {
+    var foodList = [];
+
+    invoiceItems.forEach((item) => {
+        var obj = {};
+        obj.id = item.id;
+        obj.qty = item.quantity;
+        foodList.push(obj);
+    });
+
+    return foodList;
+}
+
+function addOrder(locationEl, orderTypeEl, paymentMethodEl) {
+    var jsonForm = JSON.stringify({
+        "orderType": orderTypeEl.value,
+        "branch": locationEl.value,
+        "paymentMethod": paymentMethodEl.value,
+        "foodList": createFoodListArray()
+    });
+
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if(request.readyState === 4) {
+            if(request.status===RESPONSE_OK) {
+                alert("Order added successfully!");
+
+                invoiceItems = [];
+                total = 0;
+                updateInvoice();
+            } else {
+                alert(request.responseText);
+            }
+        }
+    };
+    request.open("POST", "/order/insert", true);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(jsonForm);
+}
+
+// order.jsp
