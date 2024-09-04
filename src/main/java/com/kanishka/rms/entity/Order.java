@@ -22,7 +22,7 @@ public class Order {
     private Long id;
     @Column(nullable = false)
     private String orderId;
-    @Column(nullable = false)
+    @Column(name = "datetime", nullable = false)
     private LocalDateTime dateTime;
     @ManyToOne
     @JoinColumn(name = "status_id", nullable = false)
