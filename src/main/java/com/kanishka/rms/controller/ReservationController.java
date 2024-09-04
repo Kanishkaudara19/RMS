@@ -1,5 +1,7 @@
 package com.kanishka.rms.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +40,40 @@ public class ReservationController {
             response = ResponseEntity.badRequest().body("Something went wrong! Please try again later.");
         }
 
+        return response;
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<ReservationDTO>> getAllReservations() {
+        return ResponseEntity.ok().body(reservationService.getAllReservation());
+    }
+
+    @GetMapping("/update")
+    public ResponseEntity<String> updateReservatin(@RequestParam("rid") long id,
+                                                   @RequestParam("datetime") String datetime) {
+        ResponseEntity<String> response;
+
+        try {
+            reservationService.updateReservation(id, datetime);
+
+            response = ResponseEntity.ok("Reservation updated successfully!");
+        } catch (Exception ex) {
+            response = ResponseEntity.badRequest().body("Something went wrong! Please try again later.");
+        }
+        return response;
+    }
+
+    @GetMapping("/delete")
+    public ResponseEntity<String> deleteReservation(@RequestParam("rid") long id) {
+        ResponseEntity<String> response;
+
+        try {
+            reservationService.deleteReservation(id);
+
+            response = ResponseEntity.ok("Reservation deleted successfully!");
+        } catch (Exception ex) {
+            response = ResponseEntity.badRequest().body("Something went wrong! Please try again later.");
+        }
         return response;
     }
 }

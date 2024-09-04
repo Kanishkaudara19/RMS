@@ -2,6 +2,9 @@ package com.kanishka.rms.service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +34,48 @@ public class ReservationService {
         if(reservationRepository.save(reservation) == null) {
             throw new ReservationAbortException("Exception on adding reservation");
         }
+    }
+
+    public List<ReservationDTO> getAllReservation() {
+        List<ReservationDTO> reservationList = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        for(Reservation reservation : reservationRepository.findAll()) {
+            ReservationDTO reservationDTO = new ReservationDTO();
+            reservationDTO.setId(reservation.getId());
+            reservationDTO.setCustomerName(reservation.getCustomer().getFname() +" "+ reservation.getCustomer().getLname());
+            reservationDTO.setBranch(reservation.getPlace());
+            reservationDTO.setNoOfSeats(reservation.getNoOfSeats());
+            reservationDTO.setDatetime(reservation.getDateTime().format(formatter));
+
+            reservationList.add(reservationDTO);
+        }
+
+        return reservationList;
+    }
+
+    public void updateReservation(long id, String datetime) throws ReservationAbortException {
+        Optional<Reservation> optionalReservation = reservationRepository.findById(id);
+
+        if(optionalReservation.isEmpty()) {
+            throw new ReservationAbortException("Reservation does not exists");
+        }
+
+        Reservation reservation = optionalReservation.get();
+        reservation.setDateTime(getLocalDateTimeInstance(datetime));
+
+        reservationRepository.save(reservation);
+    }
+
+    public void deleteReservation(long id) throws ReservationAbortException {
+        Optional<Reservation> optionalReservation = reservationRepository.findById(id);
+
+        if(optionalReservation.isEmpty()) {
+            throw new ReservationAbortException("Reservation does not exists");
+        }
+
+        Reservation reservation = optionalReservation.get();
+        reservationRepository.delete(reservation);
     }
 
     private LocalDateTime getLocalDateTimeInstance(String datetime) {
