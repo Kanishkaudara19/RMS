@@ -300,3 +300,108 @@ function updateAvailability(foodId) {
 }
 
 // foods.jsp - end
+
+// orders.jsp
+
+var orderFoodArray = [];
+
+function getOrderList() {
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if(request.readyState === 4) {
+            if(request.status===RESPONSE_OK) {
+                createOrderList(JSON.parse(request.responseText));
+            } else {
+                // Do nothing
+            }
+        }
+    };
+    request.open("GET", "/order/all", true);
+    request.send();
+}
+
+function createOrderList(orderObjArray) {
+    var tbody = document.getElementById("order-data-table");
+    tbody.innerHTML = "";
+
+    var td;
+
+    orderObjArray.forEach((order) => {
+        var tr = document.createElement("tr");
+
+        td = document.createElement("td");
+        td.innerText = order.id;
+        tr.appendChild(td);
+
+        td = document.createElement("td");
+        td.innerText = order.orderId;
+        tr.appendChild(td);
+
+        td = document.createElement("td");
+        td.innerText = order.customerName;
+        tr.appendChild(td);
+
+        td = document.createElement("td");
+        td.innerText = order.address;
+        tr.appendChild(td);
+
+        td = document.createElement("td");
+        td.innerText = order.datetime;
+        tr.appendChild(td);
+
+        td = document.createElement("td");
+        td.innerText = order.status;
+        tr.appendChild(td);
+
+        // Create edit button
+        var btn = document.createElement("button");
+        btn.classList.add("btn", "btn-secondary", "btn-sm");
+        btn.innerText = "Update";
+        btn.setAttribute("onClick", "openEditModal('"+ order.orderId +"', '"+ order.status +"');");
+
+        td = document.createElement("td");
+        td.appendChild(btn);
+        tr.appendChild(td);
+
+        tbody.appendChild(tr);
+
+        // Add food details to array
+        var foodArray = order.foodList.map(food => {
+           return { name: food.name, qty: food.qty };
+        });
+
+        orderFoodArray.push({ orderId: order.orderId, foods: foodArray });
+    });
+}
+
+function openEditModal(orderId, status) {
+    document.getElementById("orderId").value = orderId;
+    document.getElementById("status").value = status;
+
+    var tbody = document.getElementById("food-data-table");
+    tbody.innerHTML = "";
+
+    orderFoodArray.find(order => order.orderId===orderId)
+                .foods.forEach((food) => {
+
+        var tr = document.createElement("tr");
+
+        var name = document.createElement("td");
+        name.innerText = food.name;
+        tr.appendChild(name);
+
+        var qty = document.createElement("td");
+        qty.innerText = food.qty;
+        tr.appendChild(qty);
+
+        tbody.appendChild(tr);
+    });
+
+    openModal();
+}
+
+function updateOrderStatus() {
+
+}
+
+// orders.jsp
