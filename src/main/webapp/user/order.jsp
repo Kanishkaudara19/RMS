@@ -1,4 +1,14 @@
+<%@ page import="com.kanishka.rms.entity.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+    User user = (User) session.getAttribute("user");
+
+    if(user == null) {
+        response.sendRedirect("user_auth.jsp");
+    }
+%>
+
 <html>
 <head>
     <meta charset="UTF-8" />
@@ -127,7 +137,7 @@
         }
     </style>
 </head>
-<body>
+<body onload="getFoodList();">
     <!-- Navigation Bar -->
     <nav class="navbar navbar-default navbar-fixed-top navbar-transparent">
         <div class="container">
@@ -185,12 +195,7 @@
                         <div class="form-group">
                             <label for="dish">Select Dish</label>
                             <select class="form-control" id="dish" required>
-                                <option disabled selected>Select Food Item</option>
-                                <option value="Pasta">Pasta</option>
-                                <option value="Burger">Burger</option>
-                                <option value="Pizza">Pizza</option>
-                                <option value="Salad">Salad</option>
-                                <option value="Dessert">Dessert</option>
+                                <%-- Food options will be loaded here --%>
                             </select>
                         </div>
                         <div class="form-group">
@@ -226,18 +231,18 @@
                     <div class="form-group">
                         <label for="invoice-location">Select Restaurant Location</label>
                         <select class="form-control" id="invoice-location">
-                            <option disabled selected>Select Restaurant Location</option>
-                            <option value="Colombo">Colombo</option>
-                            <option value="Mathara">Mathara</option>
-                            <option value="Galle">Galle</option>
+                            <option value="0" disabled selected>Select Restaurant Location</option>
+                            <option value="MATHARA">Mathara</option>
+                            <option value="GALLE">Galle</option>
+                            <option value="COLOMBO">Colombo</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="invoice-order-type">Select Order Type</label>
                         <select class="form-control" id="invoice-order-type">
-                            <option disabled selected>Select Order Type</option>
-                            <option value="Dine-In">Dine-In</option>
-                            <option value="Delivery">Deliver</option>
+                            <option value="0" disabled selected>Select Order Type</option>
+                            <option value="DINE_IN">Dine-In</option>
+                            <option value="DELIVERY">Delivery</option>
                         </select>
                     </div>
                     <div id="invoice-items">
@@ -251,19 +256,19 @@
                         <label for="paymentMethod">Select Payment Method</label>
                         <div class="radio">
                             <label>
-                                <input type="radio" name="paymentMethod" value="cash" checked />
+                                <input type="radio" name="paymentMethod" value="CASH" checked />
                                 Cash
                             </label>
                         </div>
                         <div class="radio">
                             <label>
-                                <input type="radio" name="paymentMethod" value="card" />
+                                <input type="radio" name="paymentMethod" value="CARD" />
                                 Credit/Debit Card
                             </label>
                         </div>
                     </div>
                     <div class="form-group text-center">
-                        <button type="button" class="btn btn-success btn-lg" id="place-order">
+                        <button type="button" class="btn btn-success btn-lg" id="place-order" onclick="placeOrder();">
                             Place Order
                         </button>
                         <button type="button" class="btn btn-danger btn-lg" id="clear-order">
@@ -323,27 +328,30 @@
             });
         });
 
-
+        let invoiceItems = [];
+        let total = 0;
 
         // add and clear orders
-
         document.addEventListener("DOMContentLoaded", function () {
             const addToOrderButton = document.getElementById("add-to-order");
             const clearOrderButton = document.getElementById("clear-order");
-            const invoiceItemsContainer = document.getElementById("invoice-items");
-            const invoiceTotal = document.getElementById("invoice-total");
             const dishSelect = document.getElementById("dish");
             const quantityInput = document.getElementById("quantity");
 
-            let invoiceItems = [];
-            let total = 0;
-
             addToOrderButton.addEventListener("click", function () {
-                const dish = dishSelect.value;
+                const selectedOption = dishSelect.selectedOptions[0];
+                const id = selectedOption.value;
+
+                if(id==0) {
+                    return;
+                }
+
+                const dish = selectedOption.innerText;
+                const price = selectedOption.dataset.price;
                 const quantity = parseInt(quantityInput.value);
 
                 if (dish && quantity) {
-                    invoiceItems.push({ dish, quantity });
+                    invoiceItems.push({ id, dish, price, quantity });
                     updateInvoice();
                 }
             });
@@ -353,24 +361,27 @@
                 total = 0;
                 updateInvoice();
             });
-
-            function updateInvoice() {
-                invoiceItemsContainer.innerHTML = "";
-                total = 0;
-
-                invoiceItems.forEach((item) => {
-                    const div = document.createElement("div");
-                    div.className = "invoice-item";
-                    div.innerHTML = `<span>${item.dish}</span> <span>${item.quantity}</span>`;
-                    invoiceItemsContainer.appendChild(div);
-
-                    // Example price calculation
-                    total += item.quantity * 500; // Assume each item costs LKR 500
-                });
-
-                invoiceTotal.innerText = `LKR ${total}`;
-            }
         });
+
+        function updateInvoice() {
+            const invoiceItemsContainer = document.getElementById("invoice-items");
+            const invoiceTotal = document.getElementById("invoice-total");
+
+            invoiceItemsContainer.innerHTML = "";
+            total = 0;
+
+            invoiceItems.forEach((item) => {
+                const div = document.createElement("div");
+                div.className = "invoice-item";
+                div.innerHTML = "<span>"+ item.dish +"<\/span> <span>"+ item.quantity +"<\/span>";
+                invoiceItemsContainer.appendChild(div);
+
+                // Example price calculation
+                total += item.quantity * item.price; // Assume each item costs LKR 500
+            });
+
+            invoiceTotal.innerText = "LKR " + total;
+        }
     </script>
     <script src="../resources/js/script.js"></script>
     <script src="../resources/js/user.js"></script>
