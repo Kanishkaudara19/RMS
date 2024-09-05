@@ -61,7 +61,7 @@
         margin-top: 20px;
     }
 </style>
-<body>
+<body onload="getReportData();">
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-header">
@@ -102,30 +102,29 @@
         <div class="report-cards">
             <div class="report-card">
                 <i class="fas fa-calendar-day"></i>
-                <h3>Monthly Income</h3>
-                <p>$5,000</p>
+                <h3>Total Income</h3>
+                <p id="t-income">LKR 0</p>
             </div>
             <div class="report-card">
                 <i class="fas fa-piggy-bank"></i>
-                <h3>Monthly Reservations</h3>
-                <p>$2,000</p>
+                <h3>Total Reservations</h3>
+                <p id="t-reserv">0</p>
             </div>
             <div class="report-card">
                 <i class="fas fa-users"></i>
-                <h3>Monthly Customers</h3>
-                <p>120</p>
+                <h3>Total Customers</h3>
+                <p id="t-user">0</p>
             </div>
             <div class="report-card">
                 <i class="fas fa-box"></i>
-                <h3>Monthly Orders</h3>
-                <p>30 orders</p>
+                <h3>Total Orders</h3>
+                <p id="t-order">0</p>
             </div>
         </div>
     </div>
 
     <!-- Main Content -->
     <div class="content">
-
 
         <!-- Report Filters and Download -->
         <div class="report-filters">
@@ -145,98 +144,53 @@
             <h3>Income Report</h3>
             <table class="report-table">
                 <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Amount</th>
-                </tr>
+                    <tr>
+                        <th>Date</th>
+                        <th>Amount</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>2024-09-01</td>
-                    <td>$1,200</td>
-                </tr>
-                <tr>
-                    <td>2024-09-02</td>
-                    <td>$800</td>
-                </tr>
-                <!-- Add more rows as needed -->
+                    <tr>
+                        <td id="income-date">YYYY-MM-DD</td>
+                        <td id="income">LKR 0</td>
+                    </tr>
                 </tbody>
             </table>
 
             <h3>Reservation Report</h3>
             <table class="report-table">
                 <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Number of Reservations</th>
-                </tr>
+                    <tr>
+                        <th>Date</th>
+                        <th>Number of Reservations</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>2024-09-01</td>
-                    <td>10</td>
-                </tr>
-                <tr>
-                    <td>2024-09-02</td>
-                    <td>15</td>
-                </tr>
-                <!-- Add more rows as needed -->
+                    <tr>
+                        <td id="reserv-date">YYYY-MM-DD</td>
+                        <td id="reserv">0</td>
+                    </tr>
                 </tbody>
             </table>
 
             <h3>Order Report</h3>
             <table class="report-table">
                 <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Number of Orders</th>
-                </tr>
+                    <tr>
+                        <th>Date</th>
+                        <th>Number of Orders</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>2024-09-01</td>
-                    <td>25</td>
-                </tr>
-                <tr>
-                    <td>2024-09-02</td>
-                    <td>30</td>
-                </tr>
-                <!-- Add more rows as needed -->
-                </tbody>
-            </table>
-
-            <h3>User Report</h3>
-            <table class="report-table">
-                <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Number of New Users</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>2024-09-01</td>
-                    <td>5</td>
-                </tr>
-                <tr>
-                    <td>2024-09-02</td>
-                    <td>8</td>
-                </tr>
-                <!-- Add more rows as needed -->
+                    <tr>
+                        <td id="order-date">YYYY-MM-DD</td>
+                        <td id="order">0</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <script>
-        function generateReport() {
-            const reportType = document.getElementById('reportType').value;
-            const reportPeriod = document.getElementById('report-period');
-            const printableReport = document.getElementById('printable-report');
-            reportPeriod.innerText = reportType.charAt(0).toUpperCase() + reportType.slice(1);
-            printableReport.style.display = 'block';
-            window.scrollTo(0, document.body.scrollHeight); // Scroll to bottom to show the printable report
-        }
-    </script>
+    <script src="../resources/js/admin.js"></script>
 </body>
 </html>
