@@ -2,6 +2,7 @@ package com.kanishka.rms.service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -80,6 +81,6 @@ public class ReservationService {
 
     private LocalDateTime getLocalDateTimeInstance(String datetime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-        return LocalDateTime.parse(datetime, formatter);
+        return LocalDateTime.parse(datetime, formatter).withNano(0).truncatedTo(ChronoUnit.SECONDS);
     }
 }
