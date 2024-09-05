@@ -524,3 +524,124 @@ function deleteReservation(rid) {
 }
 
 // reservation.jsp
+
+// reports.jsp
+
+function getReportData() {
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if(request.readyState === 4) {
+            if(request.status===RESPONSE_OK) {
+                showReportData(JSON.parse(request.responseText));
+            } else {
+                // Do nothing
+            }
+        }
+    };
+    request.open("GET", "/report/get", true);
+    request.send();
+}
+
+var incomeReportArray = [];
+var orderReportArray = [];
+var reservationReportArray = [];
+
+function showReportData(reportObj) {
+    // Show total report data
+    document.getElementById("t-income").innerText = reportObj.totalIncome;
+    document.getElementById("t-reserv").innerText = reportObj.totalReservations;
+    document.getElementById("t-user").innerText = reportObj.totalUsers;
+    document.getElementById("t-order").innerText = reportObj.totalOrders;
+
+    incomeReportArray = {
+        w: reportObj.weeklyIncome,
+        m: reportObj.monthlyIncome,
+        y: reportObj.yearlyIncome
+    };
+    orderReportArray = {
+        w: reportObj.weeklyOrders,
+        m: reportObj.monthlyOrders,
+        y: reportObj.yearlyOrders
+    };
+    reservationReportArray = {
+        w: reportObj.weeklyReservations,
+        m: reportObj.monthlyReservations,
+        y: reportObj.yearlyReservations
+    };
+}
+
+function generateReport() {
+    // Refresh the report data
+    getReportData();
+
+    const reportType = document.getElementById('reportType').value;
+    const reportPeriod = document.getElementById('report-period');
+    const printableReport = document.getElementById('printable-report');
+
+    const incomeDate = document.getElementById("income-date");
+    const income = document.getElementById("income");
+    const reservDate = document.getElementById("reserv-date");
+    const reserv = document.getElementById("reserv");
+    const orderDate = document.getElementById("order-date");
+    const order = document.getElementById("order");
+
+    // Set report period in the top of report
+    reportPeriod.innerText = reportType.charAt(0).toUpperCase() + reportType.slice(1);
+
+    // Set date period to the report
+    var date = getRelevantDatePeriod(reportType.trim());
+    incomeDate.innerText = date;
+    reservDate.innerText = date;
+    orderDate.innerText = date;
+
+    // Add data
+    if(reportType.trim() === "weekly") {
+        income.innerText = incomeReportArray.w;
+        reserv.innerText = reservationReportArray.w;
+        order.innerText = orderReportArray.w;
+    } else if(reportType.trim() === "monthly") {
+        income.innerText = incomeReportArray.m;
+        reserv.innerText = reservationReportArray.m;
+        order.innerText = orderReportArray.m;
+    } else if(reportType.trim() === "yearly") {
+        income.innerText = incomeReportArray.y;
+        reserv.innerText = reservationReportArray.y;
+        order.innerText = orderReportArray.y;
+    }
+
+    // Show report
+    printableReport.style.display = 'block';
+    window.scrollTo(0, document.body.scrollHeight); // Scroll to bottom to show the printable report
+}
+
+function getRelevantDatePeriod(reportType) {
+    var startDate = new Date();
+    var currentDate = new Date();
+
+    if(reportType === "weekly") {
+        var weekAgo = new Date(currentDate);
+        weekAgo.setDate(currentDate.getDate() - 7);
+        startDate = weekAgo;
+    } else if(reportType === "monthly") {
+        var monthAgo = new Date(currentDate);
+        monthAgo.setMonth(currentDate.getMonth() - 1);
+        startDate = monthAgo;
+    } else if(reportType === "yearly") {
+        var yearAgo = new Date(currentDate);
+        yearAgo.setFullYear(currentDate.getFullYear() - 1);
+        startDate = yearAgo;
+    }
+
+    // format date
+    var year = startDate.getFullYear();
+    var month = ('0' + (startDate.getMonth() + 1)).slice(-2);
+    var day = ('0' + startDate.getDate()).slice(-2);
+
+    var currYear = currentDate.getFullYear();
+    var currMonth = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+    var currDay = ('0' + currentDate.getDate()).slice(-2);
+
+    return year + "-" + month + "-" + day + " to " + currYear + "-" + currMonth + "-" + currDay;
+}
+
+// reports.jsp
