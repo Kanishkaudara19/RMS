@@ -1,4 +1,14 @@
+<%@ page import="com.kanishka.rms.entity.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+    User user = (User) session.getAttribute("user");
+
+    if(user==null) {
+        response.sendRedirect("index.jsp");
+    }
+%>
+
 <html>
 <head>
     <meta charset="UTF-8">
