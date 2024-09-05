@@ -1,124 +1,124 @@
 package com.kanishka.rms.dto;
 
 public class ReportDTO {
-    private int totalIncome;
-    private int totalOrders;
-    private int totalReservations;
-    private int totalUsers;
+    private long totalIncome;
+    private long totalOrders;
+    private long totalReservations;
+    private long totalUsers;
 
-    private int weeklyIncome;
-    private int monthlyIncome;
-    private int yearlyIncome;
+    private long weeklyIncome;
+    private long monthlyIncome;
+    private long yearlyIncome;
 
-    private int weeklyOrders;
-    private int monthlyOrders;
-    private int yearlyOrders;
+    private long weeklyOrders;
+    private long monthlyOrders;
+    private long yearlyOrders;
 
-    private int weeklyReservations;
-    private int monthlyReservations;
-    private int yearlyReservations;
+    private long weeklyReservations;
+    private long monthlyReservations;
+    private long yearlyReservations;
 
-    public int getTotalIncome() {
+    public long getTotalIncome() {
         return totalIncome;
     }
 
-    public void setTotalIncome(int totalIncome) {
+    public void setTotalIncome(long totalIncome) {
         this.totalIncome = totalIncome;
     }
 
-    public int getTotalOrders() {
+    public long getTotalOrders() {
         return totalOrders;
     }
 
-    public void setTotalOrders(int totalOrders) {
+    public void setTotalOrders(long totalOrders) {
         this.totalOrders = totalOrders;
     }
 
-    public int getTotalReservations() {
+    public long getTotalReservations() {
         return totalReservations;
     }
 
-    public void setTotalReservations(int totalReservations) {
+    public void setTotalReservations(long totalReservations) {
         this.totalReservations = totalReservations;
     }
 
-    public int getTotalUsers() {
+    public long getTotalUsers() {
         return totalUsers;
     }
 
-    public void setTotalUsers(int totalUsers) {
+    public void setTotalUsers(long totalUsers) {
         this.totalUsers = totalUsers;
     }
 
-    public int getWeeklyIncome() {
+    public long getWeeklyIncome() {
         return weeklyIncome;
     }
 
-    public void setWeeklyIncome(int weeklyIncome) {
+    public void setWeeklyIncome(long weeklyIncome) {
         this.weeklyIncome = weeklyIncome;
     }
 
-    public int getMonthlyIncome() {
+    public long getMonthlyIncome() {
         return monthlyIncome;
     }
 
-    public void setMonthlyIncome(int monthlyIncome) {
+    public void setMonthlyIncome(long monthlyIncome) {
         this.monthlyIncome = monthlyIncome;
     }
 
-    public int getYearlyIncome() {
+    public long getYearlyIncome() {
         return yearlyIncome;
     }
 
-    public void setYearlyIncome(int yearlyIncome) {
+    public void setYearlyIncome(long yearlyIncome) {
         this.yearlyIncome = yearlyIncome;
     }
 
-    public int getWeeklyOrders() {
+    public long getWeeklyOrders() {
         return weeklyOrders;
     }
 
-    public void setWeeklyOrders(int weeklyOrders) {
+    public void setWeeklyOrders(long weeklyOrders) {
         this.weeklyOrders = weeklyOrders;
     }
 
-    public int getMonthlyOrders() {
+    public long getMonthlyOrders() {
         return monthlyOrders;
     }
 
-    public void setMonthlyOrders(int monthlyOrders) {
+    public void setMonthlyOrders(long monthlyOrders) {
         this.monthlyOrders = monthlyOrders;
     }
 
-    public int getYearlyOrders() {
+    public long getYearlyOrders() {
         return yearlyOrders;
     }
 
-    public void setYearlyOrders(int yearlyOrders) {
+    public void setYearlyOrders(long yearlyOrders) {
         this.yearlyOrders = yearlyOrders;
     }
 
-    public int getWeeklyReservations() {
+    public long getWeeklyReservations() {
         return weeklyReservations;
     }
 
-    public void setWeeklyReservations(int weeklyReservations) {
+    public void setWeeklyReservations(long weeklyReservations) {
         this.weeklyReservations = weeklyReservations;
     }
 
-    public int getMonthlyReservations() {
+    public long getMonthlyReservations() {
         return monthlyReservations;
     }
 
-    public void setMonthlyReservations(int monthlyReservations) {
+    public void setMonthlyReservations(long monthlyReservations) {
         this.monthlyReservations = monthlyReservations;
     }
 
-    public int getYearlyReservations() {
+    public long getYearlyReservations() {
         return yearlyReservations;
     }
 
-    public void setYearlyReservations(int yearlyReservations) {
+    public void setYearlyReservations(long yearlyReservations) {
         this.yearlyReservations = yearlyReservations;
     }
 }
