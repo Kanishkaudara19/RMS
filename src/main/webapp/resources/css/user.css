@@ -28,7 +28,7 @@ table {
 }
 
 #banner {
-    background: url("../resources/images/slide.jpg") no-repeat center top;
+    background: url("../images/slide.jpg") no-repeat center top;
     background-size: cover;
     min-height: 630px;
 }
@@ -587,14 +587,14 @@ body {
 }
 
 #order-banner {
-    background: url('../resources/images/slide3.webp') no-repeat center center;
+    background: url('../images/slide3.webp') no-repeat center center;
     background-size: cover;
     color: white;
 
 }
 
 #res-banner {
-    background: url('../resources/images/slide1.webp') no-repeat center center;
+    background: url('../images/slide1.webp') no-repeat center center;
     background-size: cover;
     color: white;
 
