@@ -96,10 +96,36 @@
         .star-rating .fa-star.selected {
             color: #f39c12;
         }
+        /* Make the body take the full height of the viewport */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Main content section to occupy full height minus the footer */
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Footer should stick to the bottom */
+        footer {
+            margin-top: auto;
+            background-color: #f1f1f1;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            width: 100%;
+            bottom: 0;
+        }
     </style>
 </head>
 
 <body onload="getFoodList(); getReviewList();">
+    <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+    <div class="elfsight-app-882c46de-1f8a-4994-8f61-8d7570b0b444" data-elfsight-app-lazy></div>
+
     <!-- Navigation Bar -->
     <nav class="navbar navbar-default navbar-fixed-top navbar-transparent">
         <div class="container">
