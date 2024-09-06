@@ -351,7 +351,7 @@ function reserveTable() {
     } else if(locationEl.value==0) {
         alert("Please select a location");
     } else if(!datetimeEl.value) {
-        alert("Please select a date and a time");
+        alert("Please select a valid date and a time");
     } else if(seatsEl.value == 0) {
         alert("Please enter a seat count");
     } else {
