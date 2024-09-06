@@ -1,11 +1,33 @@
 <%@ page import="com.kanishka.rms.entity.User" %>
+<%@ page import="com.kanishka.rms.model.UserType" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
+    // Retrieve the current user from the session
     User user = (User) session.getAttribute("user");
 
-    if(user==null) {
+    // Redirect to login page if the user is not logged in
+    if(user == null) {
         response.sendRedirect("index.jsp");
+        return; // Stop further execution
+    }
+
+    // Restrict access to the page for RECEPTION_STAFF
+    if(user.getUserType() == UserType.RECEPTION_STAFF) {
+        %>
+        <script type="text/javascript">
+            // Display an alert to the user
+            alert("You do not have permission to access Orders page");
+            // Redirect to the unauthorized page after alert
+            window.location.href = "reports.jsp";
+        </script>
+        <%
+        return; // Stop further execution
+    }
+
+    // Allow access for DELIVERY_STAFF and ADMIN
+    if(user.getUserType() == UserType.DELIVERY_STAFF || user.getUserType() == UserType.ADMIN) {
+        // User is authorized, proceed with page rendering
     }
 %>
 
