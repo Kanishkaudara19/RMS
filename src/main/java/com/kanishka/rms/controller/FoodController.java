@@ -3,6 +3,7 @@ package com.kanishka.rms.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +51,7 @@ public class FoodController {
         String realUploadPath = request.getServletContext().getRealPath(uploadDir);
 
         if(!new File(realUploadPath).exists()) {
-            boolean mkdir = new File(realUploadPath).mkdir();
+            boolean mkdir = new File(realUploadPath).mkdirs();
         }
         String filname = System.currentTimeMillis() +"-"+ image.getOriginalFilename() ;
         filname = filname.replace(' ', '-');
