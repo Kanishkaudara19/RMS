@@ -1,4 +1,4 @@
-1. Get a clone of the RMS repository to a preferred location on your PC. 
+1. Get a clone of the RMS repository to a preferred location on your PC.(using SSH key) 
 2. Open IDE and open the project. 
 3. Create MySQL database only in your system named rms_db 
 4. Configure spring boot to IDE first (if needed only) 
@@ -31,5 +31,5 @@
    
 7. Login to the admin panel  http://localhost:8080/admin/index.jsp and add the necessary 
   data.  
-8. Now got to customer panel  http://localhost:8080/user/index.jsp 
+8. Now go to customer panel  http://localhost:8080/user/index.jsp 
 9. Then you can use the application freely! Enjoy!
